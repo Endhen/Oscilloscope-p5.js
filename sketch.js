@@ -1,6 +1,7 @@
 var i,
-    wave = new Wave(),
-    mouseValue;
+    finalWave = new Wave(),
+    display = new Display(),
+    openDisplay = false;
 
 function setup() {
     createCanvas(600, 300);
@@ -11,12 +12,15 @@ function draw() {
     background(10);
     fill(255);
     noStroke();
+    
+    if (openDisplay === true) {
+        display.majShape(finalWave); //maj this.point
+        display.on();
+    }
+}
 
-    //mouseValueY = map(mouseY, 0, 700, -100, 100);
-    //mouseValueX = map(mouseX, 0, 700, -100, 100);
-    
-    
-    wave.create();
-    wave.display();
-    
+function mousePressed() {
+    finalWave.defineHarm(1, mouseX, 20, mouseY); // (nbr, freq, amp, phase)
+    finalWave.compilHarm();
+    openDisplay = true;
 }
