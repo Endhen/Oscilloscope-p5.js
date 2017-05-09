@@ -1,11 +1,12 @@
 var x = 0,
-    i = 0;
+    i = 0,
+    resolution = 0.2;
 
 function Point(x, y) {
     this.x = x;
     this.y = y;
     this.pSize = 3;
-    
+
     //display points 
     this.display = function () {
         ellipse(this.x, this.y, this.pSize, this.pSize);
@@ -20,7 +21,7 @@ function Harmonic(freq, amp, phase) {
     this.phase = phase;
     this.x = 0;
     this.shape = []; // contains all 'y' values
-    
+
     //define y
     this.function = function (x) {
         var y = this.amp * sin((x / this.freq) + this.phase);
@@ -30,10 +31,10 @@ function Harmonic(freq, amp, phase) {
 
     //fill this.shape
     this.createHarm = function () {
-        for (this.x = 0; this.x < width; this.x++) {
+        for (this.x = 0; this.x < (width / resolution); this.x = this.x + resolution) {
             this.shape[this.x] = this.function(this.x);
         }
-        
+
         this.y = 0;
     };
 }
@@ -51,7 +52,7 @@ function Wave() {
         if (this.spectre.length > 0) {
             this.spectre = [];
         }
-        
+
         var harm = new Harmonic(freq, amp, phase);
         harm.createHarm();
 
@@ -59,7 +60,7 @@ function Wave() {
     };
 
     this.initShape = function () {
-        for (i = 0; i < width; i++) {
+        for (i = 0; i < (width / resolution); i = i + resolution) {
             this.shape[i] = 0;
         }
     };
@@ -78,7 +79,7 @@ function Wave() {
 
 
     this.compilHarm = function () {
-        
+
         if (this.shape.length < 100) {
             this.initShape();
         }
@@ -91,7 +92,7 @@ function Wave() {
             var spectre = this.spectre[i];
 
             //add all y values of this harmonic object to this.shape
-            for (x = 0; x < width; x++) {
+            for (x = 0; x < (width / resolution); x = x + resolution) {
                 this.shape[x] = this.shape[x] + spectre.shape[x];
             }
         }
@@ -113,19 +114,20 @@ function Display() {
         var input = wave;
         
         //instanciate one point for all 'y' and 'x' values
-        for (x = 0; x < width; x++) {
+        for (x = 0; x < (width / resolution); x = x + resolution) {
             this.points[x] = new Point(x, input.shape[x] + 150);
         }
-        
+
         //refresh
-        if (this.points.length > 600) {
-            this.points.splice(0, 600);
+        if (this.points.length > (width / resolution)) {
+            this.points.splice(0, (width / resolution));
         }
     };
 
     //display all the points objects
     this.on = function () {
-        for (x = 0; x < this.points.length; x++) {
+        console.log(this.points);
+        for (x = 0; x < this.points.length; x = x + resolution) {
             this.points[x].display();
         }
     };
