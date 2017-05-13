@@ -1,6 +1,6 @@
 var x = 0,
     i = 0,
-    resolution = 0.2; //display resolution
+    resolution = 0.5; //display resolution
 
 function Point(x, y) {
     this.x = x;
@@ -9,7 +9,8 @@ function Point(x, y) {
 
     //display points 
     this.display = function () {
-        ellipse(this.x, this.y, this.pSize, this.pSize);
+        fill(this.x, this.y, 150);
+        rect(this.x, this.y, this.pSize/2, this.pSize*5);
     };
 }
 
@@ -29,18 +30,18 @@ function Harmonic(freq, amp, phase) {
         return y;
     };
 
-    //fill this.shape
+    //fill this.shape with 'y' values
     this.createHarm = function () {
-        for (this.x = 0; this.x < (width / resolution); this.x = this.x + resolution) {
-            this.shape[this.x] = this.function(this.x);
+        for (this.x; this.x < (width / resolution); this.x = this.x + resolution) {
+            this.shape[this.x] = this.function(this.x); // = y
         }
     };
 }
 
 
 function Wave() {
-    this.spectre = []; //timbre -> contains all hramonic objects
-    this.shape = []; //contains all 'y' values
+    this.spectre = []; //timbre -> contains all input harmonic objects
+    this.shape = []; //contains all 'y' output final values
 
 
     //------------ Inner functions -------------
@@ -71,13 +72,14 @@ function Wave() {
         }
 
         //Feedback
-        console.log(this.spectre);
+        //console.log(this.spectre);
     };
 
 
 
     this.compilHarm = function () {
-
+        
+        //init
         if (isNaN(this.shape[0])) {
             this.initShape();
             console.log("init !");
@@ -97,7 +99,7 @@ function Wave() {
         }
 
         //Feedback
-        console.log("> New shape : ", this.shape.length);
+        //console.log("> New shape : ", this.shape.length);
     };
 
 };
@@ -135,16 +137,15 @@ function Display() {
 
 function Controller(newWave) {
     this.openDisplay = false;
-    this.freqMod = createSlider(0, 100, 0);
-    this.ampMod = createSlider(0, 100, 0);
-    this.phaseMod = createSlider(0, 100, 0);
-    this.state = createP("state");
-
+    this.freqMod = createSlider(1, 100, 2);
+    this.ampMod = createSlider(0, 20, 1);
+    this.phaseMod = createSlider(0, 100, 32);
+    this.state;
+    
     this.setUp = function () {
         this.freqMod;
         this.ampMod;
         this.phaseMod;
-        this.state;
     }
     
     this.display = function () {
