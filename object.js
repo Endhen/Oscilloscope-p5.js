@@ -1,6 +1,6 @@
 var x = 0,
     i = 0,
-    resolution = 0.2;
+    resolution = 0.2; //display resolution
 
 function Point(x, y) {
     this.x = x;
@@ -34,8 +34,6 @@ function Harmonic(freq, amp, phase) {
         for (this.x = 0; this.x < (width / resolution); this.x = this.x + resolution) {
             this.shape[this.x] = this.function(this.x);
         }
-
-        this.y = 0;
     };
 }
 
@@ -73,15 +71,16 @@ function Wave() {
         }
 
         //Feedback
-        console.log("> ", nbrHarm, " defined harmonics, freq : ", amp, " / amp : ", amp, " / phase : ", phase);
+        console.log(this.spectre);
     };
 
 
 
     this.compilHarm = function () {
 
-        if (this.shape.length < 100) {
+        if (isNaN(this.shape[0])) {
             this.initShape();
+            console.log("init !");
         }
 
 
@@ -98,7 +97,7 @@ function Wave() {
         }
 
         //Feedback
-        console.log("> Harmoniques compilés : ", this.shape);
+        console.log("> New shape : ", this.shape.length);
     };
 
 };
@@ -112,7 +111,7 @@ function Display() {
 
     this.majShape = function (wave) {
         var input = wave;
-        
+
         //instanciate one point for all 'y' and 'x' values
         for (x = 0; x < (width / resolution); x = x + resolution) {
             this.points[x] = new Point(x, input.shape[x] + 150);
@@ -126,9 +125,29 @@ function Display() {
 
     //display all the points objects
     this.on = function () {
-        console.log(this.points);
         for (x = 0; x < this.points.length; x = x + resolution) {
             this.points[x].display();
         }
     };
+}
+
+
+
+function Controller(newWave) {
+    this.openDisplay = false;
+    this.freqMod = createSlider(0, 100, 0);
+    this.ampMod = createSlider(0, 100, 0);
+    this.phaseMod = createSlider(0, 100, 0);
+    this.state = createP("state");
+
+    this.setUp = function () {
+        this.freqMod;
+        this.ampMod;
+        this.phaseMod;
+        this.state;
+    }
+    
+    this.display = function () {
+        this.state.html("freq : " + this.freqMod.value()  + "<br/>amp : " + this.ampMod.value() + "<br/>phase : " + this.phaseMod.value());
+    }
 }

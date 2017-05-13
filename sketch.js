@@ -1,11 +1,27 @@
 var i,
-    finalWave = new Wave(),
-    display = new Display(),
-    openDisplay = false;
+    button,
+    controller,
+    wave = new Wave(),
+    display = new Display();
 
 function setup() {
     createCanvas(600, 300);
     frameRate(200);
+    controller = new Controller();
+    controller.setUp();
+    button = createButton("Display wave");
+    button.mousePressed(exe);
+}
+
+function exe() {
+    
+    //create one harm
+    wave.defineHarm(1, controller.freqMod.value(), controller.ampMod.value(), controller.phaseMod.value());
+    
+    //compil it into wave.shape
+    wave.compilHarm();
+    
+    controller.openDisplay = true;
 }
 
 function draw() {
@@ -13,14 +29,12 @@ function draw() {
     fill(255);
     noStroke();
     
-    if (openDisplay === true) {
-        display.majShape(finalWave); //maj this.point
+    controller.display();
+    
+    if (controller.openDisplay === true) {
+        display.majShape(wave); //maj this.point
         display.on();
     }
 }
 
-function mousePressed() {
-    finalWave.defineHarm(1, mouseX, 20, mouseY); // (nbr, freq, amp, phase)
-    finalWave.compilHarm();
-    openDisplay = true;
-}
+
